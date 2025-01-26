@@ -6,8 +6,16 @@
     <description>Recent content on Stephan Rayner</description>
     <generator>Hugo -- 0.139.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 27 Dec 2024 23:10:42 -0500</lastBuildDate>
+    <lastBuildDate>Sun, 26 Jan 2025 15:20:51 -0400</lastBuildDate>
     <atom:link href="https://stephan-rayner.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly</title>
+      <link>https://stephan-rayner.github.io/posts/columnvsrowdb/</link>
+      <pubDate>Sun, 26 Jan 2025 15:20:51 -0400</pubDate>
+      <guid>https://stephan-rayner.github.io/posts/columnvsrowdb/</guid>
+      <description>&lt;h2 id=&#34;motivation&#34;&gt;Motivation&lt;/h2&gt;
+&lt;p&gt;The motivation for this article comes from my time at a comically disfunctional mobile game studio and particularly a rather brash &amp;ldquo;VP of Core Tech&amp;rdquo; who once went on at length longly, loudly, and publicly, about how poor a decision it was for the analytics department (not in any way shape or form connected to his division, responsibility, or experience) I lead to choose a SQL based database to use as our datalake. Given that we had chosen BigQuery, I was deeply confused by his rantings. That is to say, I was deeply confused until I realised he had conflated SQL with relational dabases management systems typically used for CRUD (Create, Read, Update, and Delete) operations. BigQuery is many things but that is absolutely not one of them, and by the end of this article you will understand why, when to use a tool like it, and importantly when not to.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>This is Why I Write</title>
       <link>https://stephan-rayner.github.io/posts/intro/</link>

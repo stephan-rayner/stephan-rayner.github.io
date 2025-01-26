@@ -2,11 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://stephan-rayner.github.io/posts/columnvsrowdb/</loc>
+    <lastmod>2025-01-26T15:20:51-04:00</lastmod>
+  </url><url>
     <loc>https://stephan-rayner.github.io/posts/</loc>
-    <lastmod>2024-12-27T23:10:42-05:00</lastmod>
+    <lastmod>2025-01-26T15:20:51-04:00</lastmod>
   </url><url>
     <loc>https://stephan-rayner.github.io/</loc>
-    <lastmod>2024-12-27T23:10:42-05:00</lastmod>
+    <lastmod>2025-01-26T15:20:51-04:00</lastmod>
   </url><url>
     <loc>https://stephan-rayner.github.io/posts/intro/</loc>
     <lastmod>2024-12-27T23:10:42-05:00</lastmod>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly | Stephan Rayner</title>
+<meta name="keywords" content="">
+<meta name="description" content="Motivation
+The motivation for this article comes from my time at a comically disfunctional mobile game studio and particularly a rather brash &ldquo;VP of Core Tech&rdquo; who once went on at length longly, loudly, and publicly, about how poor a decision it was for the analytics department (not in any way shape or form connected to his division, responsibility, or experience) I lead to choose a SQL based database to use as our datalake. Given that we had chosen BigQuery, I was deeply confused by his rantings. That is to say, I was deeply confused until I realised he had conflated SQL with relational dabases management systems typically used for CRUD (Create, Read, Update, and Delete) operations. BigQuery is many things but that is absolutely not one of them, and by the end of this article you will understand why, when to use a tool like it, and importantly when not to.">
+<meta name="author" content="">
+<link rel="canonical" href="https://stephan-rayner.github.io/posts/columnvsrowdb/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.d6fcd20a4fb86efa4dfac8ec95da60244cc8871042183da1ef28e3a762ad79c8.css" integrity="sha256-1vzSCk&#43;4bvpN&#43;sjsldpgJEzIhxBCGD2h7yjjp2Ktecg=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://stephan-rayner.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://stephan-rayner.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://stephan-rayner.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://stephan-rayner.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://stephan-rayner.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://stephan-rayner.github.io/posts/columnvsrowdb/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:url" content="https://stephan-rayner.github.io/posts/columnvsrowdb/">
+  <meta property="og:site_name" content="Stephan Rayner">
+  <meta property="og:title" content="Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly">
+  <meta property="og:description" content="Motivation The motivation for this article comes from my time at a comically disfunctional mobile game studio and particularly a rather brash “VP of Core Tech” who once went on at length longly, loudly, and publicly, about how poor a decision it was for the analytics department (not in any way shape or form connected to his division, responsibility, or experience) I lead to choose a SQL based database to use as our datalake. Given that we had chosen BigQuery, I was deeply confused by his rantings. That is to say, I was deeply confused until I realised he had conflated SQL with relational dabases management systems typically used for CRUD (Create, Read, Update, and Delete) operations. BigQuery is many things but that is absolutely not one of them, and by the end of this article you will understand why, when to use a tool like it, and importantly when not to.">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-01-26T15:20:51-04:00">
+    <meta property="article:modified_time" content="2025-01-26T15:20:51-04:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly">
+<meta name="twitter:description" content="Motivation
+The motivation for this article comes from my time at a comically disfunctional mobile game studio and particularly a rather brash &ldquo;VP of Core Tech&rdquo; who once went on at length longly, loudly, and publicly, about how poor a decision it was for the analytics department (not in any way shape or form connected to his division, responsibility, or experience) I lead to choose a SQL based database to use as our datalake. Given that we had chosen BigQuery, I was deeply confused by his rantings. That is to say, I was deeply confused until I realised he had conflated SQL with relational dabases management systems typically used for CRUD (Create, Read, Update, and Delete) operations. BigQuery is many things but that is absolutely not one of them, and by the end of this article you will understand why, when to use a tool like it, and importantly when not to.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://stephan-rayner.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly",
+      "item": "https://stephan-rayner.github.io/posts/columnvsrowdb/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly",
+  "name": "Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly",
+  "description": "Motivation The motivation for this article comes from my time at a comically disfunctional mobile game studio and particularly a rather brash \u0026ldquo;VP of Core Tech\u0026rdquo; who once went on at length longly, loudly, and publicly, about how poor a decision it was for the analytics department (not in any way shape or form connected to his division, responsibility, or experience) I lead to choose a SQL based database to use as our datalake. Given that we had chosen BigQuery, I was deeply confused by his rantings. That is to say, I was deeply confused until I realised he had conflated SQL with relational dabases management systems typically used for CRUD (Create, Read, Update, and Delete) operations. BigQuery is many things but that is absolutely not one of them, and by the end of this article you will understand why, when to use a tool like it, and importantly when not to.\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "Motivation The motivation for this article comes from my time at a comically disfunctional mobile game studio and particularly a rather brash “VP of Core Tech” who once went on at length longly, loudly, and publicly, about how poor a decision it was for the analytics department (not in any way shape or form connected to his division, responsibility, or experience) I lead to choose a SQL based database to use as our datalake. Given that we had chosen BigQuery, I was deeply confused by his rantings. That is to say, I was deeply confused until I realised he had conflated SQL with relational dabases management systems typically used for CRUD (Create, Read, Update, and Delete) operations. BigQuery is many things but that is absolutely not one of them, and by the end of this article you will understand why, when to use a tool like it, and importantly when not to.\nThe More Polite Intro Choosing SQL as a query language is a preference for me when I am choosing a database system. I do this for a few reasons but the simplest is that I already know it, and if I ever need to hand it off to someone else they probably know SQL as well. If by any happenstance they do not know SQL it is easy to learn and the internet is replete with resources to help them.\nWhen choosing a database that leverages SQL as its query language, one of the critical considerations is whether to use a column-oriented or row-oriented database. Each is optimized for specific use cases and particular workloads, and understanding their differences can help you make an informed decision.\nRow-Oriented: The Transactional Storyteller Think of row-oriented databases like a traditional bookshelf. Each book (row) sits complete on the shelf, with all its chapters (columns) together. This makes perfect sense when you want to grab a single book and read it cover to cover. Storing data by rows, meaning that all fields of a single record are stored together on disk is intuitive and mirrors the logical structure of a traditional table.\nBest Use Case: Row-oriented databases excel in transactional workloads, occasionally called OLTP (Online Transaction Processing), where operations involve frequent, small read/write transactions affecting a few rows.\nAdvantages: Efficient for inserts and updates: Since all fields of a row are stored together, writing or updating a complete record is straightforward. Optimized for point queries: Quick retrieval of single records or a small number of rows. Simple storage design: Mirrors how data is logically represented in tables. Disadvantages: Inefficient for analytical queries: Scanning large datasets to retrieve specific fields requires reading unnecessary data, increasing I/O operations. Limited compression: Data stored row by row does not benefit from compression as effectively as columnar storage. Scalability challenges for big data analytics: Handling massive analytical workloads can strain row-oriented systems due to their storage and processing inefficiencies. Examples: Popular row-oriented databases include MySQL, PostgreSQL, and Microsoft SQL Server.\nColumn-Oriented: The Data Scientist’s Dream Continuing our book analogy, imagine you’re a literature researcher interested in how authors typically start their first chapters. With a column-oriented approach, all first chapters are stored together, making your analysis much more efficient. Column-oriented databases store data by columns rather than rows. This means all values for a specific field are stored together, making it highly efficient for analytical operations.\nBest Use Case: Column-oriented databases really come into their own with analytics operations where queries often aggregate data over many rows but focus on a subset of fields. These workloads are often described by more business types than I as OLAP (Online Analytical Processing).\nAdvantages: Faster for analytics: Since only the required columns are read, input/output (I/O) operations are minimized for analytical queries. High data compression: Similar data types stored together in columns allow for better compression, reducing storage requirements. Efficient for aggregations: Operations like SUM, AVG, or COUNT are optimized since data is aligned by field. Disadvantages: Slower for updates/inserts: Modifying or inserting data is less efficient due to the columnar storage layout. Point lookups can be slower: Unless indexing is employed, retrieving a single record is more complex. Examples: Leading column-oriented databases include Snowflake, Amazon Redshift, Google BigQuery, and ClickHouse.\nReal-World Application: Mobile Games Let’s use a mobile game scenario to illustrate when each shines:\nRow-Oriented: -- Finding a specific player's details (Great for row-oriented) SELECT * FROM players WHERE player_id = '12345'; Perfect for:\nPlayer profile updates Inventory management Real-time game state changes Column-Oriented: -- Calculating average spending per region (Column-oriented wins) SELECT region, AVG(purchase_amount) FROM player_purchases GROUP BY region; Ideal for:\nPlayer behavior analysis Revenue reporting Feature engagement metrics On Disk is Where Things Really Start to Make Sense The way data is stored on disk significantly impacts the performance of row-oriented and column-oriented databases.\nRow-Oriented Storage: In row-oriented databases, data for each row is stored contiguously on disk. For example, consider a table with three columns (id, name, score) and three rows of data:\nid name score 1 Alice 30 2 Amine 25 3 Dylan 27 On disk, the data would be stored like this:\n1, Alice, 30 2, Amine, 25 3, Dylan, 27 This structure ensures that all fields for a single record can be read or written in one operation. It’s ideal for transactional workloads or applications requiring frequent row-level updates or lookups.\nColumn-Oriented Storage: In column-oriented databases, data for each column is stored contiguously on disk. Using the same table example, the data would be stored like this:\nColumn 1 (id): 1, 2, 3 Column 2 (name): Alice, Amine, Dylan Column 3 (score): 30, 25, 27 This format allows for efficient scanning of specific columns. For instance, if an analytical query only needs the score column, the database can directly read:\n30, 25, 27 without loading irrelevant columns. Additionally, storing similar data types together enables better compression and faster aggregations.\nKey Differences Between Row-Oriented and Column-Oriented Databases Aspect Row-Oriented Databases Column-Oriented Databases Storage Data stored row by row Data stored column by column Best Use Case OLTP (e.g., CRUD, Web App Backend) OLAP (e.g., Analytics) Query Speed Faster for row-based lookups Faster for column-based operations Data Compression Limited High Insert/Update Speed Efficient Slower Examples MySQL, PostgreSQL, SQLite Snowflake, Redshift, ClickHouse, DuckDB Why Not Both 🤷, Modern Trends: Bridging the Gap With evolving technology and diverse workloads, many modern databases aim to combine the best of both worlds. Hybrid databases, such as SAP HANA and Vertica, offer mixed approaches to handle both OLTP and OLAP efficiently. These systems adapt storage and query strategies based on the workload type, providing flexibility without compromising performance.\nConclusion Remember our friend, the VP of unreasonably strong opinions from the introduction? His mistake wasn’t in questioning the choice of database - asking questions is good (perhaps he should have started with even more questions 🤷)! - but in assuming that SQL automatically meant row-oriented CRUD operations, that was the big miss. As we’ve learned, SQL is just a query language, and it can be used effectively with both row-oriented and column-oriented architectures.\nThe key takeaway is this: when choosing a database, don’t get caught up in buzzwords or assumptions. Instead, focus on your specific needs:\nIf you’re building a system that needs to handle lots of individual transactions (like a game’s player inventory system), row-oriented databases are your friend. If you’re building an analytics platform that needs to crunch numbers across millions of records (like, say, analyzing player behavior in a mobile game), column-oriented databases will serve you much better. Both architectures have their place, and understanding their strengths and weaknesses helps you make informed decisions - and avoid looking silly in front of your team. After all, the best database isn’t the one with the most impressive name or the latest buzz; it’s the one that best serves your specific use case.\n",
+  "wordCount" : "1304",
+  "inLanguage": "en",
+  "datePublished": "2025-01-26T15:20:51-04:00",
+  "dateModified": "2025-01-26T15:20:51-04:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://stephan-rayner.github.io/posts/columnvsrowdb/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stephan Rayner",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://stephan-rayner.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://stephan-rayner.github.io/" accesskey="h" title="Stephan Rayner (Alt + H)">Stephan Rayner</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly
+    </h1>
+    <div class="post-meta"><span title='2025-01-26 15:20:51 -0400 AST'>January 26, 2025</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h2 id="motivation">Motivation<a hidden class="anchor" aria-hidden="true" href="#motivation">#</a></h2>
+<p>The motivation for this article comes from my time at a comically disfunctional mobile game studio and particularly a rather brash &ldquo;VP of Core Tech&rdquo; who once went on at length longly, loudly, and publicly, about how poor a decision it was for the analytics department (not in any way shape or form connected to his division, responsibility, or experience) I lead to choose a SQL based database to use as our datalake. Given that we had chosen BigQuery, I was deeply confused by his rantings. That is to say, I was deeply confused until I realised he had conflated SQL with relational dabases management systems typically used for CRUD (Create, Read, Update, and Delete) operations. BigQuery is many things but that is absolutely not one of them, and by the end of this article you will understand why, when to use a tool like it, and importantly when not to.</p>
+<h2 id="the-more-polite-intro">The More Polite Intro<a hidden class="anchor" aria-hidden="true" href="#the-more-polite-intro">#</a></h2>
+<p>Choosing SQL as a query language is a preference for me when I am choosing a database system. I do this for a few reasons but the simplest is that I already know it, and if I ever need to hand it off to someone else they probably know SQL as well. If by any happenstance they do not know SQL it is easy to learn and the internet is replete with resources to help them.</p>
+<p>When choosing a database that leverages SQL as its query language, one of the critical considerations is whether to use a <strong>column-oriented</strong> or <strong>row-oriented</strong> database. Each is optimized for specific use cases and particular workloads, and understanding their differences can help you make an informed decision.</p>
+<hr>
+<h2 id="row-oriented-the-transactional-storyteller"><strong>Row-Oriented: The Transactional Storyteller</strong><a hidden class="anchor" aria-hidden="true" href="#row-oriented-the-transactional-storyteller">#</a></h2>
+<p>Think of row-oriented databases like a traditional bookshelf. Each book (row) sits complete on the shelf, with all its chapters (columns) together. This makes perfect sense when you want to grab a single book and read it cover to cover. Storing data by rows, meaning that all fields of a single record are stored together on disk is intuitive and mirrors the logical structure of a traditional table.</p>
+<h3 id="best-use-case"><strong>Best Use Case:</strong><a hidden class="anchor" aria-hidden="true" href="#best-use-case">#</a></h3>
+<p>Row-oriented databases excel in transactional workloads, occasionally called OLTP (<strong>Online Transaction Processing</strong>), where operations involve frequent, small read/write transactions affecting a few rows.</p>
+<h3 id="advantages"><strong>Advantages:</strong><a hidden class="anchor" aria-hidden="true" href="#advantages">#</a></h3>
+<ul>
+<li><strong>Efficient for inserts and updates:</strong> Since all fields of a row are stored together, writing or updating a complete record is straightforward.</li>
+<li><strong>Optimized for point queries:</strong> Quick retrieval of single records or a small number of rows.</li>
+<li><strong>Simple storage design:</strong> Mirrors how data is logically represented in tables.</li>
+</ul>
+<h3 id="disadvantages"><strong>Disadvantages:</strong><a hidden class="anchor" aria-hidden="true" href="#disadvantages">#</a></h3>
+<ul>
+<li><strong>Inefficient for analytical queries:</strong> Scanning large datasets to retrieve specific fields requires reading unnecessary data, increasing I/O operations.</li>
+<li><strong>Limited compression:</strong> Data stored row by row does not benefit from compression as effectively as columnar storage.</li>
+<li><strong>Scalability challenges for big data analytics:</strong> Handling massive analytical workloads can strain row-oriented systems due to their storage and processing inefficiencies.</li>
+</ul>
+<h3 id="examples"><strong>Examples:</strong><a hidden class="anchor" aria-hidden="true" href="#examples">#</a></h3>
+<p>Popular row-oriented databases include <strong>MySQL</strong>, <strong>PostgreSQL</strong>, and <strong>Microsoft SQL Server</strong>.</p>
+<hr>
+<h2 id="column-oriented-the-data-scientists-dream"><strong>Column-Oriented: The Data Scientist&rsquo;s Dream</strong><a hidden class="anchor" aria-hidden="true" href="#column-oriented-the-data-scientists-dream">#</a></h2>
+<p>Continuing our book analogy, imagine you&rsquo;re a literature researcher interested in how authors typically start their first chapters. With a column-oriented approach, all first chapters are stored together, making your analysis much more efficient. Column-oriented databases store data by columns rather than rows. This means all values for a specific field are stored together, making it highly efficient for analytical operations.</p>
+<h3 id="best-use-case-1"><strong>Best Use Case:</strong><a hidden class="anchor" aria-hidden="true" href="#best-use-case-1">#</a></h3>
+<p>Column-oriented databases really come into their own with analytics operations where queries often aggregate data over many rows but focus on a subset of fields. These workloads are often described by more business types than I as OLAP (<strong>Online Analytical Processing</strong>).</p>
+<h3 id="advantages-1"><strong>Advantages:</strong><a hidden class="anchor" aria-hidden="true" href="#advantages-1">#</a></h3>
+<ul>
+<li><strong>Faster for analytics:</strong> Since only the required columns are read, input/output (I/O) operations are minimized for analytical queries.</li>
+<li><strong>High data compression:</strong> Similar data types stored together in columns allow for better compression, reducing storage requirements.</li>
+<li><strong>Efficient for aggregations:</strong> Operations like <code>SUM</code>, <code>AVG</code>, or <code>COUNT</code> are optimized since data is aligned by field.</li>
+</ul>
+<h3 id="disadvantages-1"><strong>Disadvantages:</strong><a hidden class="anchor" aria-hidden="true" href="#disadvantages-1">#</a></h3>
+<ul>
+<li><strong>Slower for updates/inserts:</strong> Modifying or inserting data is less efficient due to the columnar storage layout.</li>
+<li><strong>Point lookups can be slower:</strong> Unless indexing is employed, retrieving a single record is more complex.</li>
+</ul>
+<h3 id="examples-1"><strong>Examples:</strong><a hidden class="anchor" aria-hidden="true" href="#examples-1">#</a></h3>
+<p>Leading column-oriented databases include <strong>Snowflake</strong>, <strong>Amazon Redshift</strong>, <strong>Google BigQuery</strong>, and <strong>ClickHouse</strong>.</p>
+<hr>
+<h2 id="real-world-application-mobile-games"><strong>Real-World Application: Mobile Games</strong><a hidden class="anchor" aria-hidden="true" href="#real-world-application-mobile-games">#</a></h2>
+<p>Let&rsquo;s use a mobile game scenario to illustrate when each shines:</p>
+<h3 id="row-oriented"><strong>Row-Oriented:</strong><a hidden class="anchor" aria-hidden="true" href="#row-oriented">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#75715e">-- Finding a specific player&#39;s details (Great for row-oriented)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">FROM</span> players <span style="color:#66d9ef">WHERE</span> player_id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;12345&#39;</span>;
+</span></span></code></pre></div><p>Perfect for:</p>
+<ul>
+<li>Player profile updates</li>
+<li>Inventory management</li>
+<li>Real-time game state changes</li>
+</ul>
+<h3 id="column-oriented"><strong>Column-Oriented:</strong><a hidden class="anchor" aria-hidden="true" href="#column-oriented">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#75715e">-- Calculating average spending per region (Column-oriented wins)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">SELECT</span> region, <span style="color:#66d9ef">AVG</span>(purchase_amount)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span> player_purchases
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">GROUP</span> <span style="color:#66d9ef">BY</span> region;
+</span></span></code></pre></div><p>Ideal for:</p>
+<ul>
+<li>Player behavior analysis</li>
+<li>Revenue reporting</li>
+<li>Feature engagement metrics</li>
+</ul>
+<hr>
+<h2 id="on-disk-is-where-things-really-start-to-make-sense"><strong>On Disk is Where Things Really Start to Make Sense</strong><a hidden class="anchor" aria-hidden="true" href="#on-disk-is-where-things-really-start-to-make-sense">#</a></h2>
+<p>The way data is stored on disk significantly impacts the performance of row-oriented and column-oriented databases.</p>
+<h3 id="row-oriented-storage"><strong>Row-Oriented Storage:</strong><a hidden class="anchor" aria-hidden="true" href="#row-oriented-storage">#</a></h3>
+<p>In row-oriented databases, data for each row is stored contiguously on disk. For example, consider a table with three columns (<code>id</code>, <code>name</code>, <code>score</code>) and three rows of data:</p>
+<table>
+  <thead>
+      <tr>
+          <th>id</th>
+          <th>name</th>
+          <th>score</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>Alice</td>
+          <td>30</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>Amine</td>
+          <td>25</td>
+      </tr>
+      <tr>
+          <td>3</td>
+          <td>Dylan</td>
+          <td>27</td>
+      </tr>
+  </tbody>
+</table>
+<p>On disk, the data would be stored like this:</p>
+<pre tabindex="0"><code>1, Alice, 30
+2, Amine, 25
+3, Dylan, 27
+</code></pre><p>This structure ensures that all fields for a single record can be read or written in one operation. It’s ideal for transactional workloads or applications requiring frequent row-level updates or lookups.</p>
+<h3 id="column-oriented-storage"><strong>Column-Oriented Storage:</strong><a hidden class="anchor" aria-hidden="true" href="#column-oriented-storage">#</a></h3>
+<p>In column-oriented databases, data for each column is stored contiguously on disk. Using the same table example, the data would be stored like this:</p>
+<pre tabindex="0"><code>Column 1 (id): 1, 2, 3
+Column 2 (name): Alice, Amine, Dylan
+Column 3 (score): 30, 25, 27
+</code></pre><p>This format allows for efficient scanning of specific columns. For instance, if an analytical query only needs the <code>score</code> column, the database can directly read:</p>
+<pre tabindex="0"><code>30, 25, 27
+</code></pre><p>without loading irrelevant columns. Additionally, storing similar data types together enables better compression and faster aggregations.</p>
+<hr>
+<h2 id="key-differences-between-row-oriented-and-column-oriented-databases"><strong>Key Differences Between Row-Oriented and Column-Oriented Databases</strong><a hidden class="anchor" aria-hidden="true" href="#key-differences-between-row-oriented-and-column-oriented-databases">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th><strong>Aspect</strong></th>
+          <th><strong>Row-Oriented Databases</strong></th>
+          <th><strong>Column-Oriented Databases</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Storage</strong></td>
+          <td>Data stored row by row</td>
+          <td>Data stored column by column</td>
+      </tr>
+      <tr>
+          <td><strong>Best Use Case</strong></td>
+          <td>OLTP (e.g., CRUD, Web App Backend)</td>
+          <td>OLAP (e.g., Analytics)</td>
+      </tr>
+      <tr>
+          <td><strong>Query Speed</strong></td>
+          <td>Faster for row-based lookups</td>
+          <td>Faster for column-based operations</td>
+      </tr>
+      <tr>
+          <td><strong>Data Compression</strong></td>
+          <td>Limited</td>
+          <td>High</td>
+      </tr>
+      <tr>
+          <td><strong>Insert/Update Speed</strong></td>
+          <td>Efficient</td>
+          <td>Slower</td>
+      </tr>
+      <tr>
+          <td><strong>Examples</strong></td>
+          <td>MySQL, PostgreSQL, SQLite</td>
+          <td>Snowflake, Redshift, ClickHouse, DuckDB</td>
+      </tr>
+  </tbody>
+</table>
+<hr>
+<h2 id="why-not-both--modern-trends-bridging-the-gap"><strong>Why Not Both 🤷, Modern Trends: Bridging the Gap</strong><a hidden class="anchor" aria-hidden="true" href="#why-not-both--modern-trends-bridging-the-gap">#</a></h2>
+<p>With evolving technology and diverse workloads, many modern databases aim to combine the best of both worlds. Hybrid databases, such as <strong>SAP HANA</strong> and <strong>Vertica</strong>, offer mixed approaches to handle both OLTP and OLAP efficiently. These systems adapt storage and query strategies based on the workload type, providing flexibility without compromising performance.</p>
+<hr>
+<h2 id="conclusion"><strong>Conclusion</strong><a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>Remember our friend, the VP of unreasonably strong opinions from the introduction? His mistake wasn&rsquo;t in questioning the choice of database - asking questions is good (perhaps he should have started with even more questions 🤷)! - but in assuming that SQL automatically meant row-oriented CRUD operations, that was the big miss. As we&rsquo;ve learned, SQL is just a query language, and it can be used effectively with both row-oriented and column-oriented architectures.</p>
+<p>The key takeaway is this: when choosing a database, don&rsquo;t get caught up in buzzwords or assumptions. Instead, focus on your specific needs:</p>
+<ul>
+<li>If you&rsquo;re building a system that needs to handle lots of individual transactions (like a game&rsquo;s player inventory system), row-oriented databases are your friend.</li>
+<li>If you&rsquo;re building an analytics platform that needs to crunch numbers across millions of records (like, say, analyzing player behavior in a mobile game), column-oriented databases will serve you much better.</li>
+</ul>
+<p>Both architectures have their place, and understanding their strengths and weaknesses helps you make informed decisions - and avoid looking silly in front of your team. After all, the best database isn&rsquo;t the one with the most impressive name or the latest buzz; it&rsquo;s the one that best serves your specific use case.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2025 <a href="https://stephan-rayner.github.io/">Stephan Rayner</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
