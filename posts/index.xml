@@ -6,8 +6,18 @@
     <description>Recent content in Posts on Stephan Rayner</description>
     <generator>Hugo -- 0.139.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 26 Jan 2025 15:20:51 -0400</lastBuildDate>
+    <lastBuildDate>Thu, 30 Jan 2025 11:35:42 -0500</lastBuildDate>
     <atom:link href="https://stephan-rayner.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>DuckDB Has Replaced JQ For Me</title>
+      <link>https://stephan-rayner.github.io/posts/jq2duckdb/</link>
+      <pubDate>Thu, 30 Jan 2025 11:35:42 -0500</pubDate>
+      <guid>https://stephan-rayner.github.io/posts/jq2duckdb/</guid>
+      <description>&lt;h2 id=&#34;the-problem&#34;&gt;The Problem&lt;/h2&gt;
+&lt;p&gt;Processing JSON Lines (JSONL) data on the command line has traditionally been done using JQ, but its specialized syntax and limited functionality can make complex data operations challenging. Many developers need a more powerful and intuitive tool for JSON processing tasks.&lt;/p&gt;
+&lt;h2 id=&#34;a-solution&#34;&gt;A Solution&lt;/h2&gt;
+&lt;p&gt;DuckDB provides a SQL-based alternative to JQ that offers better performance, familiar syntax, and more advanced features for processing JSONL data. Let&amp;rsquo;s explore how DuckDB can replace JQ for common JSON processing tasks.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly</title>
       <link>https://stephan-rayner.github.io/posts/columnvsrowdb/</link>
