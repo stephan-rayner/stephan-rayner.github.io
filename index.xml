@@ -6,8 +6,21 @@
     <description>Recent content on Stephan Rayner</description>
     <generator>Hugo -- 0.139.2</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Jan 2025 11:35:42 -0500</lastBuildDate>
+    <lastBuildDate>Tue, 15 Apr 2025 10:41:09 -0300</lastBuildDate>
     <atom:link href="https://stephan-rayner.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>📝 How to Rewrite a Git Commit with `rebase -i`</title>
+      <link>https://stephan-rayner.github.io/posts/rewritegitcommit/</link>
+      <pubDate>Tue, 15 Apr 2025 10:41:09 -0300</pubDate>
+      <guid>https://stephan-rayner.github.io/posts/rewritegitcommit/</guid>
+      <description>&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — Git has your back.&lt;/p&gt;
+&lt;p&gt;If the commit isn’t already pushed (or you&amp;rsquo;re okay force-pushing), you can easily rename it using &lt;strong&gt;interactive rebase&lt;/strong&gt;. Here’s how.&lt;/p&gt;
+&lt;h3 id=&#34;step-1-see-your-recent-commits&#34;&gt;Step 1: See your recent commits&lt;/h3&gt;
+&lt;p&gt;First, check how far back the commit is:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git log --oneline
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Each line is a commit, with the most recent on top. Count how far back the one you want to rename is.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>DuckDB Has Replaced JQ For Me</title>
       <link>https://stephan-rayner.github.io/posts/jq2duckdb/</link>
