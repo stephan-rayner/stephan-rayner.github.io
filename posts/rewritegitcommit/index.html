@@ -8,7 +8,7 @@
 <title>📝 How to Rewrite a Git Commit with `rebase -i` | Stephan Rayner</title>
 <meta name="keywords" content="">
 <meta name="description" content="
-Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — Git has your back.
+Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — we can change that.
 If the commit isn’t already pushed (or you&rsquo;re okay force-pushing), you can easily rename it using interactive rebase. Here’s how.
 Step 1: See your recent commits
 First, check how far back the commit is:
@@ -64,7 +64,7 @@ Each line is a commit, with the most recent on top. Count how far back the one y
 </noscript><meta property="og:url" content="https://stephan-rayner.github.io/posts/rewritegitcommit/">
   <meta property="og:site_name" content="Stephan Rayner">
   <meta property="og:title" content="📝 How to Rewrite a Git Commit with `rebase -i`">
-  <meta property="og:description" content=" Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — Git has your back.
+  <meta property="og:description" content=" Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — we can change that.
 If the commit isn’t already pushed (or you’re okay force-pushing), you can easily rename it using interactive rebase. Here’s how.
 Step 1: See your recent commits First, check how far back the commit is:
 git log --oneline Each line is a commit, with the most recent on top. Count how far back the one you want to rename is.">
@@ -76,7 +76,7 @@ git log --oneline Each line is a commit, with the most recent on top. Count how 
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="📝 How to Rewrite a Git Commit with `rebase -i`">
 <meta name="twitter:description" content="
-Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — Git has your back.
+Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — we can change that.
 If the commit isn’t already pushed (or you&rsquo;re okay force-pushing), you can easily rename it using interactive rebase. Here’s how.
 Step 1: See your recent commits
 First, check how far back the commit is:
@@ -110,12 +110,12 @@ Each line is a commit, with the most recent on top. Count how far back the one y
   "@type": "BlogPosting",
   "headline": "📝 How to Rewrite a Git Commit with `rebase -i`",
   "name": "📝 How to Rewrite a Git Commit with \u0060rebase -i\u0060",
-  "description": " Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — Git has your back.\nIf the commit isn’t already pushed (or you\u0026rsquo;re okay force-pushing), you can easily rename it using interactive rebase. Here’s how.\nStep 1: See your recent commits First, check how far back the commit is:\ngit log --oneline Each line is a commit, with the most recent on top. Count how far back the one you want to rename is.\n",
+  "description": " Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — we can change that.\nIf the commit isn’t already pushed (or you\u0026rsquo;re okay force-pushing), you can easily rename it using interactive rebase. Here’s how.\nStep 1: See your recent commits First, check how far back the commit is:\ngit log --oneline Each line is a commit, with the most recent on top. Count how far back the one you want to rename is.\n",
   "keywords": [
     
   ],
-  "articleBody": " Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — Git has your back.\nIf the commit isn’t already pushed (or you’re okay force-pushing), you can easily rename it using interactive rebase. Here’s how.\nStep 1: See your recent commits First, check how far back the commit is:\ngit log --oneline Each line is a commit, with the most recent on top. Count how far back the one you want to rename is.\nStep 2: Start an interactive rebase Use the number of commits you want to review. For example, if the commit is 3 commits ago:\ngit rebase -i HEAD~3 This will open a text editor with a list of commits.\nStep 3: Mark the commit to be renamed Change the word pick to reword (or just r) next to the commit you want to rename:\nreword a1b2c3d Fix typo in README pick d4e5f6g Add unit tests pick h7i8j9k Update CI config Then save and close the file.\nStep 4: Edit the commit message Git will now prompt you to enter a new message for the commit you marked. Type your updated message, save, and close the editor.\nStep 5: Done! If there are no conflicts, your rebase will complete. If Git hits a conflict, it’ll tell you what to do — usually:\ngit rebase --continue A Quick Word of Caution If you’ve already pushed the commit to a shared branch, renaming it will rewrite history. You’ll need to force push:\ngit push --force # or possibly git push -f origin YOUR_GIT_BRANCH_HERE Personally, I am fond of this method as it injects the name of the branch into the command at execution time.\ngit push -f origin $(git branch | grep '*' | tr -d '* [:space:]') That’s it! Next time you typo your commit message or want to clean things up, interactive rebase is your friend.\n",
-  "wordCount" : "320",
+  "articleBody": " Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — we can change that.\nIf the commit isn’t already pushed (or you’re okay force-pushing), you can easily rename it using interactive rebase. Here’s how.\nStep 1: See your recent commits First, check how far back the commit is:\ngit log --oneline Each line is a commit, with the most recent on top. Count how far back the one you want to rename is.\nStep 2: Start an interactive rebase Use the number of commits you want to review. For example, if the commit is 3 commits ago:\ngit rebase -i HEAD~3 This will open a text editor with a list of commits.\nStep 3: Mark the commit to be renamed Change the word pick to reword (or just r) next to the commit you want to rename:\nreword a1b2c3d Fix typo in README pick d4e5f6g Add unit tests pick h7i8j9k Update CI config Then save and close the file.\nStep 4: Edit the commit message Git will now prompt you to enter a new message for the commit you marked. Type your updated message, save, and close the editor.\nStep 5: Done! If there are no conflicts, your rebase will complete. If Git hits a conflict, it’ll tell you what to do — usually:\ngit rebase --continue A Quick Word of Caution If you’ve already pushed the commit to a shared branch, renaming it will rewrite history. You’ll need to force push:\ngit push --force # or possibly git push -f origin YOUR_GIT_BRANCH_HERE Personally, I am fond of this method as it injects the name of the branch into the command at execution time.\ngit push -f origin $(git branch | grep '*' | tr -d '* [:space:]') That’s it! Next time you typo your commit message or want to clean things up, interactive rebase is your friend.\nI hope that helped 😀!\n",
+  "wordCount" : "325",
   "inLanguage": "en",
   "datePublished": "2025-04-15T10:41:09-03:00",
   "dateModified": "2025-04-15T10:41:09-03:00",
@@ -191,7 +191,7 @@ Each line is a commit, with the most recent on top. Count how far back the one y
 </div>
   </header> 
   <div class="post-content"><!-- raw HTML omitted -->
-<p>Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — Git has your back.</p>
+<p>Ever make a commit and then immediately realize the message could be clearer or you typed “fix” as “fiz”? Don’t worry — we can change that.</p>
 <p>If the commit isn’t already pushed (or you&rsquo;re okay force-pushing), you can easily rename it using <strong>interactive rebase</strong>. Here’s how.</p>
 <h3 id="step-1-see-your-recent-commits">Step 1: See your recent commits<a hidden class="anchor" aria-hidden="true" href="#step-1-see-your-recent-commits">#</a></h3>
 <p>First, check how far back the commit is:</p>
@@ -223,6 +223,7 @@ Each line is a commit, with the most recent on top. Count how far back the one y
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push -f origin <span style="color:#66d9ef">$(</span>git branch | grep <span style="color:#e6db74">&#39;*&#39;</span> | tr -d <span style="color:#e6db74">&#39;* [:space:]&#39;</span><span style="color:#66d9ef">)</span>
 </span></span></code></pre></div><hr>
 <p>That’s it! Next time you typo your commit message or want to clean things up, interactive rebase is your friend.</p>
+<p>I hope that helped 😀!</p>
 
 
   </div>
