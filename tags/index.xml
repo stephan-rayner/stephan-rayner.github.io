@@ -2,24 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Tags on Stephan Rayner</title>
-    <link>https://stephan-rayner.github.io/tags/</link>
+    <link>http://localhost:1313/tags/</link>
     <description>Recent content in Tags on Stephan Rayner</description>
-    <generator>Hugo -- 0.139.2</generator>
+    <generator>Hugo -- 0.147.8</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Jan 2025 11:35:42 -0500</lastBuildDate>
-    <atom:link href="https://stephan-rayner.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 15 Apr 2025 10:41:09 -0400</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Git</title>
+      <link>http://localhost:1313/tags/git/</link>
+      <pubDate>Tue, 15 Apr 2025 10:41:09 -0400</pubDate>
+      <guid>http://localhost:1313/tags/git/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Database</title>
-      <link>https://stephan-rayner.github.io/tags/database/</link>
+      <link>http://localhost:1313/tags/database/</link>
       <pubDate>Thu, 30 Jan 2025 11:35:42 -0500</pubDate>
-      <guid>https://stephan-rayner.github.io/tags/database/</guid>
+      <guid>http://localhost:1313/tags/database/</guid>
       <description></description>
     </item>
     <item>
       <title>Tools</title>
-      <link>https://stephan-rayner.github.io/tags/tools/</link>
+      <link>http://localhost:1313/tags/tools/</link>
       <pubDate>Thu, 30 Jan 2025 11:35:42 -0500</pubDate>
-      <guid>https://stephan-rayner.github.io/tags/tools/</guid>
+      <guid>http://localhost:1313/tags/tools/</guid>
       <description></description>
     </item>
   </channel>
