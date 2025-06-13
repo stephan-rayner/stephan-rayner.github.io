@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Git on Stephan Rayner</title>
+    <link>https://stephan-rayner.github.io/tags/git/</link>
+    <description>Recent content in Git on Stephan Rayner</description>
+    <generator>Hugo -- 0.147.8</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 15 Apr 2025 10:41:09 -0400</lastBuildDate>
+    <atom:link href="https://stephan-rayner.github.io/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>📝 Rewriting a Git Commit Message</title>
+      <link>https://stephan-rayner.github.io/posts/rewritegitcommit/</link>
+      <pubDate>Tue, 15 Apr 2025 10:41:09 -0400</pubDate>
+      <guid>https://stephan-rayner.github.io/posts/rewritegitcommit/</guid>
+      <description>&lt;p&gt;So you started contributing to a new project and have an excellent contribution to make. You code it up, test it, and wrap it up in a commit. You are exceedingly proud of yourself and then you realize that your commit message is a little unclear and also you have a typo.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;fiz: typo
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;There is something ironic about this commit isn&amp;rsquo;t there 😏. Let&amp;rsquo;s fix this message, we can address the typo and make the message more expressive. Perhaps we can make the message something like the following:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
