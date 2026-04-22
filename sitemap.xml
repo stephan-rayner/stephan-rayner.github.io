@@ -2,38 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/posts/rewritegitcommit/</loc>
+    <loc>https://stephan-rayner.github.io/posts/rewritegitcommit/</loc>
     <lastmod>2025-04-15T10:41:09-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/git/</loc>
+    <loc>https://stephan-rayner.github.io/tags/git/</loc>
     <lastmod>2025-04-15T10:41:09-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>https://stephan-rayner.github.io/posts/</loc>
     <lastmod>2025-04-15T10:41:09-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://stephan-rayner.github.io/</loc>
     <lastmod>2025-04-15T10:41:09-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://stephan-rayner.github.io/tags/</loc>
     <lastmod>2025-04-15T10:41:09-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/database/</loc>
+    <loc>https://stephan-rayner.github.io/tags/database/</loc>
     <lastmod>2025-01-30T11:35:42-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/jq2duckdb/</loc>
+    <loc>https://stephan-rayner.github.io/posts/jq2duckdb/</loc>
     <lastmod>2025-01-30T11:35:42-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/tools/</loc>
+    <loc>https://stephan-rayner.github.io/tags/tools/</loc>
     <lastmod>2025-01-30T11:35:42-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/columnvsrowdb/</loc>
+    <loc>https://stephan-rayner.github.io/posts/columnvsrowdb/</loc>
     <lastmod>2025-01-26T15:20:51-04:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/intro/</loc>
+    <loc>https://stephan-rayner.github.io/posts/intro/</loc>
     <lastmod>2024-12-27T23:10:42-05:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://stephan-rayner.github.io/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/search/</loc>
+    <loc>https://stephan-rayner.github.io/search/</loc>
   </url>
 </urlset>
