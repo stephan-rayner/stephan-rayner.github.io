@@ -125,22 +125,20 @@
                     <span>Tags</span>
                 </a>
             </li>
+            <li>
+                <a href="https://stephan-rayner.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </header>
-<main class="main"> 
-<article class="first-entry home-info">
-    <header class="entry-header">
-        <h1>My Mostly Technical Personal Blog</h1>
-    </header>
-    <div class="entry-content md-content">
-        
-        <p>👋 Welcome to my personal blog!</p>
-<p>At its heart, this blog is about three things: preserving the wisdom passed to me, refining my understanding through explanation, and inviting others into the messy joy of figuring things out together. It’s for them, and for me. 🌱</p>
-
-    </div>
-    <footer class="entry-footer">
-        <div class="social-icons" >
+<main class="main"><div class="profile">
+    <div class="profile_inner">
+        <img draggable="false" src="https://stephan-rayner.github.io/images/avatar.jpg" alt="Stephan Rayner" title="Stephan Rayner"
+            height="150" width="150" />
+        <h1>Stephan Rayner</h1>
+        <span>Mostly technical writing about databases, tools, and dev experience</span><div class="social-icons" >
     <a href="https://github.com/stephan-rayner" target="_blank" rel="noopener noreferrer me"
         title="Find Me on Github">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -170,62 +168,21 @@
     </a>
 </div>
 
-    </footer>
-</article>
+        <div class="buttons">
+            <a class="button" href="/posts" rel="noopener" title="Posts">
+                <span class="button-inner">
+                    Posts
+                </span>
+            </a>
+            <a class="button" href="/tags" rel="noopener" title="Tags">
+                <span class="button-inner">
+                    Tags
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
 
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">📝 Rewriting a Git Commit Message
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>So you started contributing to a new project and have an excellent contribution to make. You code it up, test it, and wrap it up in a commit. You are exceedingly proud of yourself and then you realize that your commit message is a little unclear and also you have a typo.
-fiz: typo There is something ironic about this commit isn’t there 😏. Let’s fix this message, we can address the typo and make the message more expressive. Perhaps we can make the message something like the following:
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-04-15 10:41:09 -0400 -0400'>April 15, 2025</span>&nbsp;·&nbsp;<span>Stephan Rayner</span></footer>
-  <a class="entry-link" aria-label="post link to 📝 Rewriting a Git Commit Message" href="https://stephan-rayner.github.io/posts/rewritegitcommit/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">DuckDB Has Replaced JQ For Me
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>The Problem Processing JSON Lines (JSONL) data on the command line has traditionally been done using JQ, but its specialized syntax and limited functionality can make complex data operations challenging. Many developers need a more powerful and intuitive tool for JSON processing tasks.
-A Solution DuckDB provides a SQL-based alternative to JQ that offers better performance, familiar syntax, and more advanced features for processing JSONL data. Let’s explore how DuckDB can replace JQ for common JSON processing tasks.
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-01-30 11:35:42 -0500 -0500'>January 30, 2025</span>&nbsp;·&nbsp;<span>Stephan Rayner</span></footer>
-  <a class="entry-link" aria-label="post link to DuckDB Has Replaced JQ For Me" href="https://stephan-rayner.github.io/posts/jq2duckdb/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>Motivation The motivation for this article comes from my time at a comically dysfunctional mobile game studio and particularly a rather brash “VP of Core Tech” who once went on at length longly, loudly, and publicly, about how poor a decision it was for the analytics department (not in any way shape or form connected to his division, responsibility, or experience) I lead to choose a SQL based database to use as our datalake. Given that we had chosen BigQuery, I was deeply confused by his rantings. That is to say, I was deeply confused until I realised he had conflated SQL with relational database management systems typically used for CRUD (Create, Read, Update, and Delete) operations. BigQuery is many things but that is absolutely not one of them, and by the end of this article you will understand why, when to use a tool like it, and importantly when not to.
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2025-01-26 15:20:51 -0400 -0400'>January 26, 2025</span>&nbsp;·&nbsp;<span>Stephan Rayner</span></footer>
-  <a class="entry-link" aria-label="post link to Column-Oriented vs Row-Oriented Databases: How to Avoid Looking Silly" href="https://stephan-rayner.github.io/posts/columnvsrowdb/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
-    <h2 class="entry-hint-parent">This is Why I Write
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>I’ve Been Lucky Over the years, I’ve been incredibly fortunate to work alongside some excellent engineers. The opportunities I had early in my career to learn from these talented people shaped me into who I am today. Beyond their technical skills, their passion for what they were teaching made me rethink what it was to be a good engineer. I now believe that engineering (of all kinds) is a much more interpersonal discipline where knowledge sharing should be the principal indicator of a great engineer.
-...</p>
-  </div>
-  <footer class="entry-footer"><span title='2024-12-27 23:10:42 -0500 -0500'>December 27, 2024</span>&nbsp;·&nbsp;<span>Stephan Rayner</span></footer>
-  <a class="entry-link" aria-label="post link to This is Why I Write" href="https://stephan-rayner.github.io/posts/intro/"></a>
-</article>
     </main>
     
 <footer class="footer">
